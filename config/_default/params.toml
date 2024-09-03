@@ -6,7 +6,7 @@ favicon = "/favicon.png"
 
 [footer]
 since = 2020
-customText = ""
+customText = "Just Trying Out Some Hugo 😀"
 
 [dateFormat]
 # published = "2023-12-31T23:59:59+05:30" 
