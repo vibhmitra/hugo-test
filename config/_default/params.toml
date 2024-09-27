@@ -10,7 +10,7 @@ customText = "Just Trying Out Some Hugo 😀"
 designedBy = "None"
 
 [dateFormat]
-# published = "2023-12-31T23:59:59+05:30" 
+published = "2024-09-16T18:52:39.892Z" 
 lastUpdated = "Jan 02, 2006 15:04 MST"
 
 [sidebar]
