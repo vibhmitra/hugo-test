@@ -1,59 +1,49 @@
 name: Deploy to Github Pages
 
 on:
-  push:
-    # Only run the workflow when pushing to the master branch
-    branches: [master]
-  # Removed pull_request trigger as it's unreliable for commit message checks in deployment
+    push:
+        branches: [master]
+    pull_request:
+        branches: [master]
 
 jobs:
-  deploy: # All steps are now contained within this single job
-    # 🚨 CORRECT PLACEMENT of the conditional check 🚨
-    # The 'if' conditional must be a direct child of the job definition.
-    if: contains(github.event.head_commit.message, '[deploy]')
-    
-    runs-on: ubuntu-latest
+    build:
+        runs-on: ubuntu-latest
 
-    permissions:
-      contents: write # Necessary for the deployment action
+        permissions:
+            # Give the default GITHUB_TOKEN write permission to commit and push the
+            # added or changed files to the repository.
+            contents: write
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+        steps:
+            - uses: actions/checkout@v4
 
-      # --- Hugo Setup and Build ---
-      
-      - name: Cache Hugo resources
-        uses: actions/cache@v4
-        env:
-          cache-name: cache-hugo-resources
-        with:
-          path: resources
-          key: ${{ env.cache-name }}
+            - name: Cache Hugo resources
+              uses: actions/cache@v4
+              env:
+                  cache-name: cache-hugo-resources
+              with:
+                  path: resources
+                  key: ${{ env.cache-name }}
 
-      # Note: setup-go@v5 is generally not needed if Hugo is installed via peaceiris/actions-hugo, 
-      # but leaving it if your theme requires Go modules.
-      - uses: actions/setup-go@v5
-        with:
-          go-version: "^1.17.0"
-      
-      - name: Setup Hugo
-        uses: peaceiris/actions-hugo@v3
-        with:
-          hugo-version: "latest"
-          extended: true
+            - uses: actions/setup-go@v5
+              with:
+                  go-version: "^1.17.0"
+            - run: go version
 
-      - name: Build Hugo Site
-        run: hugo --minify --gc
+            - name: Setup Hugo
+              uses: peaceiris/actions-hugo@v3
+              with:
+                  hugo-version: "latest"
+                  extended: true
 
-      # --- Deployment ---
-      
-      - name: Deploy to gh-pages branch 🚀
-        # Added if: success() ensures deployment only happens if the build step succeeds
-        if: success()
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          branch: gh-pages
-          folder: public
-          clean: true
-          single-commit: true
+            - name: Build
+              run: hugo --minify --gc
+
+            - name: Deploy 🚀
+              uses: JamesIves/github-pages-deploy-action@v4
+              with:
+                  branch: gh-pages
+                  folder: public
+                  clean: true
+                  single-commit: true
