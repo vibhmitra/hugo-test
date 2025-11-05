@@ -17,3 +17,6 @@ hasCJKLanguage = false
 
 # Change it to your Disqus shortname before using
 disqusShortname = "vibhmitra"
+
+# disable googleAnalytics by default
+googleAnalytics = ""
