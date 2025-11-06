@@ -36,6 +36,8 @@ permissions:
 jobs:
   # Build job
   build:
+    # By ME🤷🤷🤷
+    if: "contains(github.event.head_commit.message, '[deploy]')"
     runs-on: ubuntu-latest
     env:
       HUGO_VERSION: ${{ github.event.inputs.hugoVersion || '0.145.0' }}
